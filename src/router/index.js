@@ -1,23 +1,20 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-
+const Dashboard = () => import('../views/Dashboard')
+const redisList = () => import('../views/redisList/redis')
+const redisDetail = () => import('../views/redisList/redisDetail')
+const Monitor = () => import('../views/redisMonitor/Monitor')
+const Operation = () => import('../views/redisOperation/Operation')
+//
 Vue.use(VueRouter)
 
 const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
+  { path: '', redirect: '/dashboard' },
+  { path: '/dashboard', name: 'Dashboard', component: Dashboard },
+  { path: '/redis/list', name: 'redisList', component: redisList },
+  { path: '/redis/redisDetail', name: 'redisDetail', component: redisDetail },
+  { path: '/redis/monitor', name: 'Monitor', component: Monitor },
+  { path: '/redis/operation', name: 'Monitor', component: Operation },
 ]
 
 const router = new VueRouter({
