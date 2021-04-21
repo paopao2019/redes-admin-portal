@@ -83,7 +83,11 @@ export const exportExcel = (params) => {
 
 
 
-
-
-
-
+// 发送命令
+export const sendCommand = (data) => {
+  return service({
+    url: "/command/sendCommand",
+    method: 'post',
+    data
+  })
+}
