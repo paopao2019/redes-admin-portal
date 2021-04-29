@@ -37,7 +37,8 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 
 ### 所有集群基本情况界面
-![image](https://github.com/paopao2019/redes-admin-portal/blob/master/src/assets/demo-pic/dashborad.jpg)
+![image](https://github.com/paopao2019/redes-admin-portal/blob/master/src/assets/demo-pic/dashborad_1.jpg)
+![image](https://github.com/paopao2019/redes-admin-portal/blob/master/src/assets/demo-pic/dashborad_2.jpg)
 ### 集群列表 增删改
 ![image](https://github.com/paopao2019/redes-admin-portal/blob/master/src/assets/demo-pic/redis_list.jpg)
 ### 数据操作CONSOLE
