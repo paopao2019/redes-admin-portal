@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-const Dashboard = () => import('../views/Dashboard')
+const Dashboard = () => import('../views/redisDashboard/Dashboard')
 const redisList = () => import('../views/redisList/redis')
 const redisDetail = () => import('../views/redisList/redisDetail')
 const Monitor = () => import('../views/redisMonitor/Monitor')
@@ -14,7 +14,7 @@ const routes = [
   { path: '/redis/list', name: 'redisList', component: redisList },
   { path: '/redis/redisDetail', name: 'redisDetail', component: redisDetail },
   { path: '/redis/monitor', name: 'Monitor', component: Monitor },
-  { path: '/redis/operation', name: 'Monitor', component: Operation },
+  { path: '/redis/operation', name: 'Operation', component: Operation },
 ]
 
 const router = new VueRouter({
