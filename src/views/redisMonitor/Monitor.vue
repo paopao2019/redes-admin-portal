@@ -53,7 +53,7 @@
 </template>
 
 <script>
-  import { getRedisClusterList, getInfoItemMonitorData } from "@/api/redis";
+  import { getRedisClusterList, getRedisClusterById, getInfoItemMonitorData } from "@/api/redis";
   import itemMonitor from "./itemMonitor";
   export default {
     name: "Monitor",
@@ -128,32 +128,55 @@
         this.searchMonitorData()
         // 查询数据
       },
-      searchMonitorData() {
-        getRedisClusterList().then( res => {
-          if (res.code == 0 ) {
-            this.clusterOptions = res.data.list
-            this.cluster_id = this.clusterOptions[0].ID
-            if (this.searchNode == "Master") {
-              this.node_list = []
-              this.node_list.push(this.clusterOptions[0].cluster_master)
-            } else {
-              this.node_list = []
-              this.node_list = this.clusterOptions[0].nodes.split(',')
-            }
-            // 获取监控数据
-            console.log(this.timeRange)
-            getInfoItemMonitorData({"cluster_id":this.clusterOptions[0].ID, "start_time":this.getTimeStampString(this.timeRange[0]),
-              "end_time":this.getTimeStampString(this.timeRange[1]), "node_list": this.node_list}).then(res => {
+      searchMonitorData(type) {
+        if (type == "first") {
+          getRedisClusterList().then( res => {
+            if (res.code == 0 ) {
+              this.clusterOptions = res.data.list
+              this.cluster_id = this.clusterOptions[0].ID
+              if (this.searchNode == "Master") {
+                this.node_list = []
+                this.node_list.push(this.clusterOptions[0].cluster_master)
+              } else {
+                this.node_list = []
+                this.node_list = this.clusterOptions[0].nodes.split(',')
+              }
+              // 获取监控数据
+              console.log(this.timeRange)
+
+              getInfoItemMonitorData({"cluster_id":this.cluster_id, "start_time":this.getTimeStampString(this.timeRange[0]),
+                "end_time":this.getTimeStampString(this.timeRange[1]), "node_list": this.node_list}).then(res => {
                 console.log(res)
                 this.redisMonitorData = res.data
-            })
-          } else {
-            this.$message({
-              type: 'error',
-              message: '网络请求失败',
-            })
-          }
-        })
+              })
+            } else {
+              this.$message({
+                type: 'error',
+                message: '网络请求失败',
+              })
+            }
+          })
+        } else {
+          // 通过clusterID 获取集群信息 pass
+          getRedisClusterById({id: parseInt(this.cluster_id)}).then(res => {
+            if (res.code == 0) {
+              this.cluster_master = res.data.redis.cluster_master
+              if (this.searchNode == "Master") {
+                this.node_list = []
+                this.node_list.push(this.cluster_master)
+              } else {
+                this.node_list = []
+                this.node_list = res.data.redis.nodes.split(',')
+              }
+              getInfoItemMonitorData({"cluster_id":this.cluster_id, "start_time":this.getTimeStampString(this.timeRange[0]),
+                "end_time":this.getTimeStampString(this.timeRange[1]), "node_list": this.node_list}).then(res => {
+                console.log(res)
+                this.redisMonitorData = res.data
+              })
+            }
+          })
+        }
+
       },
       // 转成 s的字符串时间戳
       getTimeStampString(d) {
@@ -161,7 +184,7 @@
       }
     },
     created() {
-      this.searchMonitorData()
+      this.searchMonitorData("first")
 
     }
   }
